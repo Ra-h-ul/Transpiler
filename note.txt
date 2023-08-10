@@ -1,1 +1,74 @@
-step 1: lexing 
+step 1: lexing (turns the string into tokens)
+step 2: parse (turns the token into AST) 
+
+
+
+
+
+
+
+
+
+
+
+package src
+
+type valuekind uint
+
+const (
+	literalvalue valuekind = iota
+	listvalue
+)
+
+type value struct {
+	kind    valuekind
+	literal *Token
+	list    *ast
+}
+
+// ast is a list of values
+type ast []value
+
+func Parse(tokens []Token, index int) (ast, int) {
+	var a ast
+
+	token := tokens[index]
+	if !(token.kind == syntaxToken &&
+		token.value == "(") {
+		panic("Should be an open parenthesis")
+	}
+	index++
+
+	for index < len(tokens) {
+		token := tokens[index]
+		if token.kind == syntaxToken && token.value == "(" {
+			//parse recursively
+			child, nextindex := Parse(tokens, index)
+			a = append(a, value{
+				kind: listvalue,
+				list: &child,
+			})
+			index = nextindex
+			continue
+
+		}
+
+		if token.kind == syntaxToken && token.value == ")" {
+			return a, index + 1
+		}
+
+		a = append(a, value{
+			kind:    literalvalue,
+			literal: &token,
+		})
+		index++
+	}
+
+	if tokens[index-1].kind == syntaxToken &&
+		tokens[index-1].value != ")" {
+		panic("expected closing parenthesis")
+	}
+
+	return a, index
+
+}

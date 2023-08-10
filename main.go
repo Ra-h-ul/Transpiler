@@ -2,23 +2,30 @@ package main
 
 import (
 	"fmt"
-
-	"example.go/src"
 )
 
 func main() {
 
-	//	input, err := os.ReadFile(os.Args[1])
-	//	if err != nil {
-	//		panic(err)
-	//	}
+	/*
+		input, err := os.ReadFile(os.Args[1])
+		if err != nil {
+			panic(err)
+		}
+	*/
 
-	input := "(+ 1 3)"
-	tokens := src.Lex(string(input))
-	// fmt.Println(tokens[0])
+	input := " ( + 13 2  )"
+	tokens := Lex(string(input))
 
-	for i := 0; i < len(tokens); i++ {
-		fmt.Println(tokens[i])
+	fmt.Print("Tokens : ")
+	for _, token := range tokens {
+		fmt.Print(token)
+		fmt.Print(" ")
 	}
+	fmt.Println()
+
+	fmt.Print("AST : ")
+	ast, _ := Parse(tokens, 0)
+
+	fmt.Println(ast.pretty())
 
 }

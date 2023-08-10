@@ -1,4 +1,4 @@
-package src
+package main
 
 import (
 	"unicode"
@@ -8,8 +8,8 @@ type Tokenkind uint
 
 const (
 	syntaxToken     Tokenkind = iota // (  )
-	identifierToken                  //+ -
 	integerToken                     //1 2 3 12
+	identifierToken                  //+ -
 
 )
 
@@ -20,8 +20,7 @@ type Token struct {
 }
 
 /*
-	remove white space till a character is found and returns
-
+remove white space till a character is found and returns
 the index of the character
 */
 func removespace(source []rune, cursor int) int {
@@ -104,8 +103,7 @@ func lexIdentifierToken(source []rune, cursor int) (int, *Token) {
 }
 
 /*
-	Takes a slice/arrays of rune type and returns
-
+Takes a slice/arrays of rune type and returns
 slice  of items(Tokens) which will be used for
 parsing
 */
